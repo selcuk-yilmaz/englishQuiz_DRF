@@ -1,5 +1,4 @@
 from rest_framework import generics
-from rest_framework.viewsets import ModelViewSet
 
 from quizApp.models import (
     Lesson,
@@ -17,15 +16,15 @@ from .serializers import (
 )
 
 
-class LessonList(generics.ListAPIView):
+class LessonList(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
 
-class SubjectList(generics.ListAPIView):
+class SubjectList(generics.ListCreateAPIView):
     queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
 
-class GradeList(generics.ListAPIView):
+class GradeList(generics.ListCreateAPIView):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
 
@@ -36,7 +35,7 @@ from rest_framework import status
 import cloudinary.uploader
 
 
-class QestionViewSet(viewsets.ModelViewSet):
+class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
     parser_classes = [MultiPartParser, FormParser]

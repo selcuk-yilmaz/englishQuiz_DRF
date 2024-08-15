@@ -3,13 +3,13 @@ from .views import (
     LessonList,
     SubjectList,
     GradeList,
-    QestionViewSet,
+    QuestionViewSet,
 )
 from rest_framework import routers
 router=routers.DefaultRouter()
 
 # router.register('results',ResultsGetPost)
-router.register(r'questions', QestionViewSet)
+router.register(r'questions', QuestionViewSet)
 
 
 urlpatterns = [

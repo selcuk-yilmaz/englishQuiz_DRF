@@ -55,4 +55,4 @@ class Question(CreateUpdateTimeField):
 
 
     def __str__(self):
-        return self.subject      
+        return self.url      
