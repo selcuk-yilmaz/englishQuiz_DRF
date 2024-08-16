@@ -49,7 +49,7 @@ class Question(CreateUpdateTimeField):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE,related_name='subject')
     grade = models.ForeignKey(Grade, on_delete=models.CASCADE,related_name='grade')
     url = models.URLField(max_length=200)
-    difficulty = models.IntegerField(default=1,choices=[(1,"Easy"),(2,"Medium"),(3,"Hard")])
+    difficulty = models.CharField(max_length=255,default="Easy",choices=[("Easy","Easy"),("Medium","Medium"),("Hard","Hard")])
     correct= models.CharField(max_length=1, choices=SCALE)
     number_of_options = models.CharField(max_length=255)
 

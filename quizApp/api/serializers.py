@@ -38,8 +38,11 @@ class GradeSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(write_only=True,required=False)  # Dosya yüklemeleri için
-
+    subject_title = serializers.SerializerMethodField()
     class Meta:
         model = Question
-        fields = ['id', 'subject', 'grade', 'url', 'image', 'difficulty', 'correct', 'number_of_options']
+        fields = ['id', 'subject','subject_title', 'grade', 'url', 'image', 'difficulty', 'correct', 'number_of_options']
         read_only_fields = ['url']
+
+    def get_subject_title(self, obj):
+        return obj.subject.title  # subject'in title alanını döndürüyoruz   
