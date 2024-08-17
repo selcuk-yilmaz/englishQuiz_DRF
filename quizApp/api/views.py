@@ -73,4 +73,23 @@ class QuestionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def perform_update(self, serializer):
-        serializer.save()        
+        serializer.save()  
+
+class SelectedGradeList(generics.ListAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer   
+    # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+       grade = self.kwargs['grade']
+    #    print(subject)
+       return Question.objects.filter(grade=grade)     
+class SelectedSubjectView(generics.ListAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer   
+    # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+       subject = self.kwargs['subject']
+       print(subject)
+       return Question.objects.filter(subject__title__iexact=subject)              

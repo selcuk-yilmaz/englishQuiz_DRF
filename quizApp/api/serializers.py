@@ -18,15 +18,18 @@ class LessonSerializer(serializers.ModelSerializer):
         )
 
 class SubjectSerializer(serializers.ModelSerializer):
+    question_count=serializers.SerializerMethodField()
     class Meta:
         model = Subject
         fields = (
             'id',
             'lesson',
             'title',
-            # 'question_count'
+            'question_count',
         )
-
+    def get_question_count(self,obj):
+        return Question.objects.filter(subject=obj.id).count()
+    
 class GradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grade
