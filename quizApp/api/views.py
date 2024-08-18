@@ -91,5 +91,5 @@ class SelectedSubjectView(generics.ListAPIView):
 
     def get_queryset(self):
        subject = self.kwargs['subject']
-       print(subject)
+    #    print(subject)
        return Question.objects.filter(subject__title__iexact=subject)              

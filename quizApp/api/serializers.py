@@ -24,6 +24,7 @@ class SubjectSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'lesson',
+            'grade',
             'title',
             'question_count',
         )
@@ -31,13 +32,17 @@ class SubjectSerializer(serializers.ModelSerializer):
         return Question.objects.filter(subject=obj.id).count()
     
 class GradeSerializer(serializers.ModelSerializer):
+    question_count=serializers.SerializerMethodField()
+
     class Meta:
         model = Grade
         fields = (
             'id',
             'level',
-            # 'question_count'
+            'question_count'
         )
+    def get_question_count(self,obj):
+        return Question.objects.filter(grade=obj.id).count()    
 
 class QuestionSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(write_only=True,required=False)  # Dosya yüklemeleri için

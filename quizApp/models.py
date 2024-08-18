@@ -16,12 +16,19 @@ class Lesson(models.Model):
     def __str__(self):
         return self.name
     
-    # @property
-    # def lesson_count(self):
-    #     return self.Lesson.count() 
+class Grade(CreateUpdateTimeField):
+    level = models.IntegerField(default=1)
+
+
+    def __str__(self):
+        return self.level 
     
+    @property
+    def question_count(self):
+        return self.question_set.count()     
 class Subject(CreateUpdateTimeField):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE,related_name='Lesson')
+    grade = models.ForeignKey(Grade, default=1,on_delete=models.CASCADE,related_name='Grade')
     title = models.CharField(max_length=255)
 
     def __str__(self):
@@ -31,12 +38,7 @@ class Subject(CreateUpdateTimeField):
     def question_count(self):
         return self.question_set.count()
     
-class Grade(CreateUpdateTimeField):
-    # lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE,related_name='Lesson')
-    level = models.CharField(max_length=255)
 
-    def __str__(self):
-        return self.level  
 
 class Question(CreateUpdateTimeField):
     SCALE = (
