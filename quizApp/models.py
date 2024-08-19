@@ -21,7 +21,7 @@ class Grade(CreateUpdateTimeField):
 
 
     def __str__(self):
-        return self.level 
+        return str(self.level) 
     
     @property
     def question_count(self):
@@ -57,4 +57,5 @@ class Question(CreateUpdateTimeField):
 
 
     def __str__(self):
-        return self.url      
+        return self.url   
+       

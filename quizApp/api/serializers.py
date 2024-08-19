@@ -19,15 +19,23 @@ class LessonSerializer(serializers.ModelSerializer):
 
 class SubjectSerializer(serializers.ModelSerializer):
     question_count=serializers.SerializerMethodField()
+    lesson_name = serializers.SerializerMethodField()
+    grade_level = serializers.SerializerMethodField()
+
     class Meta:
         model = Subject
         fields = (
             'id',
-            'lesson',
-            'grade',
+            'lesson_name',
+            'grade_level',
             'title',
             'question_count',
         )
+
+    def get_lesson_name(self, obj):
+        return obj.lesson.name  # subject'in title alanını döndürüyoruz  
+    def get_grade_level(self, obj):
+        return obj.grade.level  # subject'in title alanını döndürüyoruz  
     def get_question_count(self,obj):
         return Question.objects.filter(subject=obj.id).count()
     
@@ -46,11 +54,16 @@ class GradeSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(write_only=True,required=False)  # Dosya yüklemeleri için
+    grade_level = serializers.SerializerMethodField()
     subject_title = serializers.SerializerMethodField()
     class Meta:
         model = Question
-        fields = ['id', 'subject','subject_title', 'grade', 'url', 'image', 'difficulty', 'correct', 'number_of_options']
+        fields = ['id', 'subject','grade','url','difficulty', 'correct', 'number_of_options', 'image','grade_level', 'subject_title']
         read_only_fields = ['url']
 
+    def get_lesson_name(self, obj):
+        return obj.lesson.name  # subject'in title alanını döndürüyoruz  
+    def get_grade_level(self, obj):
+        return obj.grade.level  # subject'in title alanını döndürüyoruz  
     def get_subject_title(self, obj):
-        return obj.subject.title  # subject'in title alanını döndürüyoruz   
+        return obj.subject.title  # subject'in title alanını döndürüyoruz 
