@@ -19,14 +19,12 @@ from .serializers import (
 class LessonList(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-
-class SubjectList(generics.ListCreateAPIView):
-    queryset = Subject.objects.all()
-    serializer_class = SubjectSerializer
-
 class GradeList(generics.ListCreateAPIView):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
+class SubjectList(generics.ListCreateAPIView):
+    queryset = Subject.objects.all()
+    serializer_class = SubjectSerializer
 
 from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -55,7 +53,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         # Modeli kaydet
         question = Question.objects.create(
             subject=serializer.validated_data['subject'],
-            grade=serializer.validated_data['grade'],
+            # grade=serializer.validated_data['grade'],
             url=upload_result['secure_url'],
             # image_id=upload_result['public_id']
             difficulty=serializer.validated_data['difficulty'],
@@ -76,20 +74,20 @@ class QuestionViewSet(viewsets.ModelViewSet):
         serializer.save()  
 
 class SelectedGradeList(generics.ListAPIView):
-    queryset = Question.objects.all()
-    serializer_class = QuestionSerializer   
+    queryset = Subject.objects.all()
+    serializer_class =  SubjectSerializer 
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
        grade = self.kwargs['grade']
     #    print(subject)
-       return Question.objects.filter(grade=grade)     
+       return Subject.objects.filter(grade=grade)     
 class SelectedSubjectView(generics.ListAPIView):
-    queryset = Question.objects.all()
-    serializer_class = QuestionSerializer   
+    queryset = Subject.objects.all()
+    serializer_class = SubjectSerializer   
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
        subject = self.kwargs['subject']
     #    print(subject)
-       return Question.objects.filter(subject__title__iexact=subject)              
+       return Subject.objects.filter(title__iexact=subject)              
