@@ -30,7 +30,7 @@ class Grade(CreateUpdateTimeField):
 class Subject(CreateUpdateTimeField):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE,related_name='Lesson')
     grade = models.ForeignKey(Grade, default=1,on_delete=models.CASCADE,related_name='Grade')
-    title = models.CharField(max_length=255)
+    title = models.SlugField(max_length=255, unique=True)  # Ensure the slug is unique
 
     def __str__(self):
         return self.title 

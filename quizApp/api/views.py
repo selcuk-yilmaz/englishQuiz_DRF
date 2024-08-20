@@ -82,12 +82,12 @@ class SelectedGradeList(generics.ListAPIView):
        grade = self.kwargs['grade']
     #    print(subject)
        return Subject.objects.filter(grade=grade)     
+# views.py
 class SelectedSubjectView(generics.ListAPIView):
-    queryset = Subject.objects.all()
-    serializer_class = SubjectSerializer   
-    # permission_classes = [IsAuthenticated]
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer   
 
     def get_queryset(self):
-       subject = self.kwargs['subject']
-    #    print(subject)
-       return Subject.objects.filter(title__iexact=subject)              
+        subject_slug = self.kwargs['slug']
+        return Question.objects.filter(subject__title=subject_slug)
+             
