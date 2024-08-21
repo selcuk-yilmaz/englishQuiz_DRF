@@ -5,15 +5,14 @@ from quizApp.models import (
     Subject,
     Grade,
     Question,
-    
 )
 from .serializers import (
     LessonSerializer,
     SubjectSerializer,
     GradeSerializer,
     QuestionSerializer
-
 )
+from .pagination import MyLimitOffsetPagination
 
 
 class LessonList(generics.ListCreateAPIView):
@@ -85,7 +84,9 @@ class SelectedGradeList(generics.ListAPIView):
 # views.py
 class SelectedSubjectView(generics.ListAPIView):
     queryset = Question.objects.all()
-    serializer_class = QuestionSerializer   
+    serializer_class = QuestionSerializer 
+    pagination_class = MyLimitOffsetPagination
+  
 
     def get_queryset(self):
         subject_slug = self.kwargs['slug']
