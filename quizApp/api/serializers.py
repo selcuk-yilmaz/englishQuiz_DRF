@@ -4,6 +4,7 @@ from quizApp.models import (
     Subject,
     Grade,
     Question,
+    ResultOfQuiz,
     
 )
 
@@ -64,3 +65,17 @@ class QuestionSerializer(serializers.ModelSerializer):
         return obj.grade.level  # subject'in title alanını döndürüyoruz  
     def get_subject_title(self, obj):
         return obj.subject.title  # subject'in title alanını döndürüyoruz 
+    
+class ResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResultOfQuiz
+        fields = (
+            'id',
+            'name',
+            'correct',
+            'wrong',
+            'emty',
+            'score',
+            'status',
+            'wrong_questions'
+        )    

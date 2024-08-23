@@ -60,3 +60,22 @@ class Question(CreateUpdateTimeField):
     def __str__(self):
         return self.url   
        
+class  ResultOfQuiz(CreateUpdateTimeField):
+    SCALE = (
+        ('poor', 'too bad'),
+        ('medium', 'poor'),
+        ('normal', 'good'),
+        ('good', 'better'),
+        ('perfect', 'perfect')
+    )
+    name = models.CharField(max_length=50, verbose_name='Student Name')
+    correct = models.CharField(max_length=30)
+    wrong= models.CharField(max_length=15)
+    emty = models.CharField(max_length=200)
+    score = models.CharField(max_length=200)
+    status = models.CharField(max_length=20, choices=SCALE)
+    wrong_questions = models.JSONField(default=list, blank=True)
+
+
+    def __str__(self):
+        return self.status

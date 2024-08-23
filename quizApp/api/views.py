@@ -1,20 +1,22 @@
-from rest_framework import generics
 
 from quizApp.models import (
     Lesson,
     Subject,
     Grade,
     Question,
+    ResultOfQuiz,
 )
 from .serializers import (
     LessonSerializer,
     SubjectSerializer,
     GradeSerializer,
-    QuestionSerializer
+    QuestionSerializer,
+    ResultSerializer
 )
 from .pagination import MyLimitOffsetPagination
 
-
+#  BELOW İS Lesson Grade Subject listeler
+from rest_framework import generics
 class LessonList(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
@@ -25,6 +27,7 @@ class SubjectList(generics.ListCreateAPIView):
     queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
 
+#  BELOW İS QuestionViewSet
 from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
@@ -91,4 +94,77 @@ class SelectedSubjectView(generics.ListAPIView):
     def get_queryset(self):
         subject_slug = self.kwargs['slug']
         return Question.objects.filter(subject__title=subject_slug)
-             
+    
+#  BELOW IS ResultsView without save db
+from rest_framework.views import APIView
+
+class ResultsView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        student_responses = request.data.get('studentResponses', [])
+
+        correct_count = 0
+        wrong_count = 0
+        empty_count = 10 - len(student_responses)
+        wrong_questions = []  # To store the IDs of wrong questions
+
+        for response in student_responses:
+            try:
+                question = Question.objects.get(id=response['id'])
+                
+                if response['selectedOption'] == question.correct:
+                    correct_count += 1
+                else:
+                    wrong_count += 1
+                    wrong_questions.append({
+                        "id": question.id,
+                        "subject_name": question.subject.title  # Assuming Question model has subject with a 'name' field
+                    })
+            except Question.DoesNotExist:
+                return Response({"error": "Invalid question ID"}, status=status.HTTP_400_BAD_REQUEST)
+
+        score = correct_count * 10
+
+        # Determine the status based on the score
+        if score <= 40:
+            status_result = 'too bad'
+        elif score <= 50:
+            status_result = 'poor'
+        elif score <= 70:
+            status_result = 'good'
+        elif score <= 90:
+            status_result = 'better'
+        else:
+            status_result = 'perfect'
+
+        # Commenting out the creation and saving of ResultOfQuiz instance
+        """
+        # Create and save the ResultOfQuiz instance
+        result = ResultOfQuiz.objects.create(
+            name=user,
+            correct=str(correct_count),
+            wrong=str(wrong_count),
+            emty=str(empty_count),
+            score=str(score),
+            status=status_result
+        )
+        """
+
+        # Commenting out the serializer and saving result to the database
+        """
+        # Serialize the result and return the response
+        serializer = ResultSerializer(result)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        """
+
+        # Return a sample response for testing without saving to the database
+        return Response({
+            "user": str(user),
+            "correct": correct_count,
+            "wrong": wrong_count,
+            "empty": empty_count,
+            "score": score,
+            "status": status_result,
+            "wrong_questions":wrong_questions
+        }, status=status.HTTP_200_OK)
