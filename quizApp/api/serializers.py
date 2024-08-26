@@ -77,5 +77,6 @@ class ResultSerializer(serializers.ModelSerializer):
             'emty',
             'score',
             'status',
-            'wrong_questions'
+            'wrong_questions',
+            'correct_questions'
         )    

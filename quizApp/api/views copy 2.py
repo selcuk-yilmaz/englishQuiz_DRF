@@ -106,9 +106,8 @@ class ResultsView(APIView):
 
         correct_count = 0
         wrong_count = 0
-        empty_count = 10- len(student_responses)
-        wrong_questions = []
-        correct_questions = []
+        empty_count = 10 - len(student_responses)
+        wrong_questions = []  # To store the IDs of wrong questions
 
         for response in student_responses:
             try:
@@ -116,24 +115,14 @@ class ResultsView(APIView):
                 
                 if response['selectedOption'] == question.correct:
                     correct_count += 1
-                    correct_questions.append({
-                    "id": question.id,
-                    "subject_title": question.subject.title,
-                    "url": question.url,
-                    "correct": question.correct,
-                    "difficulty":question.difficulty
-                    })
                 else:
                     wrong_count += 1
                     wrong_questions.append({
-                    "id": question.id,
-                    "subject_title": question.subject.title,
-                    "url": question.url,
-                    "correct": question.correct,
-                    "difficulty":question.difficulty
+                        "id": question.id,
+                        "subject_name": question.subject.title  # Assuming Question model has subject with a 'name' field
                     })
             except Question.DoesNotExist:
-                return Response({"error": "Invalid question ID"}, status=status.HTTP_400_BAD_REQUEST)        
+                return Response({"error": "Invalid question ID"}, status=status.HTTP_400_BAD_REQUEST)
 
         score = correct_count * 10
 
@@ -149,7 +138,27 @@ class ResultsView(APIView):
         else:
             status_result = 'perfect'
 
-        # Return the response with full question details for wrong and empty questions
+        # Commenting out the creation and saving of ResultOfQuiz instance
+        """
+        # Create and save the ResultOfQuiz instance
+        result = ResultOfQuiz.objects.create(
+            name=user,
+            correct=str(correct_count),
+            wrong=str(wrong_count),
+            emty=str(empty_count),
+            score=str(score),
+            status=status_result
+        )
+        """
+
+        # Commenting out the serializer and saving result to the database
+        """
+        # Serialize the result and return the response
+        serializer = ResultSerializer(result)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        """
+
+        # Return a sample response for testing without saving to the database
         return Response({
             "user": str(user),
             "correct": correct_count,
@@ -157,6 +166,5 @@ class ResultsView(APIView):
             "empty": empty_count,
             "score": score,
             "status": status_result,
-            "wrong_questions": wrong_questions,
-            "correct_questions": correct_questions 
+            "wrong_questions":wrong_questions
         }, status=status.HTTP_200_OK)
