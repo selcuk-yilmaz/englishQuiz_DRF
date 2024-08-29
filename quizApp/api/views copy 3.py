@@ -20,19 +20,10 @@ from rest_framework import generics
 class LessonList(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-class LessonDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer    
 class GradeList(generics.ListCreateAPIView):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
-class GradeDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Grade.objects.all()
-    serializer_class = GradeSerializer
 class SubjectList(generics.ListCreateAPIView):
-    queryset = Subject.objects.all()
-    serializer_class = SubjectSerializer
-class SubjectDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
 
@@ -50,15 +41,16 @@ class QuestionViewSet(viewsets.ModelViewSet):
     parser_classes = [MultiPartParser, FormParser]
 
     def create(self, request, *args, **kwargs):
-        # print("req data",request.data)
-        serializer = self.get_serializer(data=request.data)
-        # print("serializer", serializer)
+        print("req data",request.data)
 
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            print(serializer.errors) 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
         serializer.is_valid(raise_exception=True)
-        # if not serializer.is_valid():
-        #     print(serializer.errors) 
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # print("serializer-is_valid", serializer)
+        print("serializer url", serializer.validated_data['url'])
+        print("serializer image", serializer.validated_data['image'])
 
         # Cloudinary'ye yükle
         upload_result = cloudinary.uploader.upload(

@@ -8,7 +8,7 @@ class CreateUpdateTimeField(models.Model):
         abstract = True
 
 class Lesson(models.Model):
-    name = models.CharField(max_length=25)
+    name = models.CharField(max_length=25, unique=True)
 
     class Meta:
         verbose_name_plural = "Lesson"
@@ -18,7 +18,7 @@ class Lesson(models.Model):
     
 
 class Grade(CreateUpdateTimeField):
-    level = models.IntegerField(default=1)
+    level = models.IntegerField(default=1, unique=True)
 
     def __str__(self):
         return str(self.level) 

@@ -27,7 +27,8 @@ class GradeSerializer(serializers.ModelSerializer):
             'question_count'
         )
     def get_question_count(self,obj):
-        return Question.objects.filter(url=obj.id).count()   
+        return Question.objects.filter(url=obj.id).count() 
+    # aşağısnın doğru çalışması halide comment silinecek  
 class SubjectSerializer(serializers.ModelSerializer):
     question_count=serializers.SerializerMethodField()
     lesson_name = serializers.SerializerMethodField()
@@ -37,6 +38,8 @@ class SubjectSerializer(serializers.ModelSerializer):
         model = Subject
         fields = (
             'id',
+            'lesson',  # When data comes from fe, it comes with these keys.
+            'grade',   # When data comes from fe, it comes with these keys.
             'lesson_name',
             'grade_level',
             'title',
