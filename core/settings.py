@@ -40,10 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #third party lib
     'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+
+
     'cloudinary',
     #apps
     'quizApp',
     'corsheaders',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -165,3 +170,13 @@ CORS_ALLOW_METHODS = [
     "POST",
     "PUT",
 ]
+# below  are auth process
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+# *eğer custom bir serializer yazdıysan burda tanımla 
+REST_AUTH = {
+    'TOKEN_SERIALIZER': 'users.serializers.CustomTokenSerializer',
+}
