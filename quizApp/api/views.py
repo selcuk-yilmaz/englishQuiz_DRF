@@ -117,7 +117,7 @@ from rest_framework.views import APIView
 class ResultsView(APIView):
 
     def post(self, request, *args, **kwargs):
-        user = request.user
+        user = request.data.get("user")
         student_responses = request.data.get('studentResponses', [])
 
         correct_count = 0
