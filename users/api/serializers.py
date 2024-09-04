@@ -69,6 +69,7 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "full_name",
             "is_staff",# frontend kısmında butonların aktif olması için
+            "is_superuser",
         )
     def get_full_name(self,obj):
         return f"{obj.first_name.title()} {obj.last_name.upper()}"
@@ -79,3 +80,15 @@ class CustomTokenSerializer(TokenSerializer):
     class Meta(TokenSerializer.Meta):
         model = Token
         fields = ("key", "user")
+
+
+class SiteUsersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+        )         

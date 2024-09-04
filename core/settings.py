@@ -178,5 +178,5 @@ REST_FRAMEWORK = {
 }
 # *eğer custom bir serializer yazdıysan burda tanımla 
 REST_AUTH = {
-    'TOKEN_SERIALIZER': 'users.serializers.CustomTokenSerializer',
+    'TOKEN_SERIALIZER': 'users.api.serializers.CustomTokenSerializer',
 }

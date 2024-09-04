@@ -1,11 +1,12 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView,ListAPIView
 from .serializers import RegisterSerializer
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
 from rest_framework.decorators import api_view
+from .serializers import SiteUsersSerializer
 
 # Create your views here.
 class RegisterView(CreateAPIView):
@@ -13,6 +14,7 @@ class RegisterView(CreateAPIView):
     queryset = User.objects.all()
 
     def create(self, request, *args, **kwargs):
+        # print(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -30,3 +32,8 @@ def logout(request):
     request.user.auth_token.delete()
     data = {'message': 'succesfully logout'}
     return Response(data,status=status.HTTP_200_OK)
+
+class SiteUsersView(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = SiteUsersSerializer
+
